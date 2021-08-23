@@ -1,0 +1,65 @@
+version: "3"
+services:
+  laravel-breeze:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+          BUILD: 'local'
+          PORT: '80'
+    container_name: laravel-breeze
+    ports:
+      - 808:80
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - laravel-breeze-db
+    environment:
+      APP_DEBUG: 'true'
+      APP_NAME: 'gcp-intro | Laravel Breeze'
+      APP_ENV: 'local'
+      # Generate a new key and paste below
+      APP_KEY: 'base64:OoBYmwIIal8E8oeiX0oxZEx5/4V0/ZOa5nwsIwpcqQk='
+      LOG_LEVEL: 'debug'
+      APP_URL: 'http://210.81.9.1'
+      DB_CONNECTION: 'pgsql'
+      DATABASE_URL: 'pgsql://postgres:docker@laravel-breeze-db:5432/postgres'
+      #SENTRY_DSN: ''
+    networks:
+      laravel-breeze:
+        ipv4_address: 210.81.9.1
+
+  laravel-breeze-db:
+    image: postgres:latest
+    ports:
+    - 2345:5432
+    volumes:
+      - laravel_breeze_db_data:/var/lib/postgres
+    environment:
+      POSTGRES_PASSWORD: docker
+    container_name: laravel-breeze-db
+    networks:
+      laravel-breeze:
+        ipv4_address: 210.81.9.2
+
+#  redis:
+#    image: redis:alpine
+#    command: redis-server --requirepass docker
+#    ports:
+#      - 8379:6379
+#    volumes:
+#      - $PWD/redis-data:/var/lib/redis
+#    environment:
+#      - REDIS_REPLICATION_MODE=master
+#    networks:
+#      fnl-laravel-breeze:
+#        ipv4_address: 210.81.9.3
+
+volumes:
+  laravel_breeze_db_data: {}
+networks:
+  laravel-breeze:
+    ipam:
+      driver: default
+      config:
+        - subnet: 210.81.0.0/16
