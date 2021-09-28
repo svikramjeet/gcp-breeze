@@ -5,3 +5,4 @@ GCP -Breeze
 - Queue
 
 laravel 8
+PHP 8
