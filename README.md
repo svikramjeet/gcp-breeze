@@ -3,3 +3,5 @@ GCP -Breeze
 - Cloud run
 - Cloud SQL
 - Queue
+
+laravel 8
